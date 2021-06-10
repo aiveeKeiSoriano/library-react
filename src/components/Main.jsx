@@ -3,6 +3,7 @@ import { Book, Category, Menu, MenuBook, People } from "@material-ui/icons";
 import { useState } from "react";
 import { BrowserRouter as Router, Link, Switch, Route } from 'react-router-dom'
 import BooksList from "./BooksList";
+import SignUp from "./SignUp";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -52,6 +53,9 @@ export default function Main() {
                     </Route>
                     <Route path='/issues'>
                         <h1>List of Issued Books</h1>
+                    </Route>
+                    <Route path='/signup'>
+                        <SignUp />
                     </Route>
                 </Switch>
             </Wrapper>
