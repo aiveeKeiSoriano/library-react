@@ -3,6 +3,7 @@ import { Book, Category, Menu, MenuBook, People } from "@material-ui/icons";
 import { useState } from "react";
 import { BrowserRouter as Router, Link, Switch, Route } from 'react-router-dom'
 import BooksList from "./BooksList";
+import LogIn from "./Login";
 import SignUp from "./SignUp";
 
 const useStyles = makeStyles((theme) => ({
@@ -57,6 +58,9 @@ export default function Main() {
                     <Route path='/signup'>
                         <SignUp />
                     </Route>
+                    <Route path='/login'>
+                        <LogIn />
+                    </Route>
                 </Switch>
             </Wrapper>
         </Router>
@@ -85,7 +89,9 @@ function Wrapper(props) {
                     <Typography variant='h6' className={classes.title}>
                         McLaren College Library
                     </Typography>
-                    <Button color='inherit'>Login</Button>
+                    <Link to='login' style={{ textDecorationLine: 'none', color: 'white' }}>
+                        <Button color='inherit'>Login</Button>
+                    </Link>
                 </Toolbar>
             </AppBar>
             <>

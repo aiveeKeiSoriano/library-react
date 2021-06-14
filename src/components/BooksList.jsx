@@ -2,6 +2,7 @@ import { Button, CircularProgress, Dialog, DialogTitle, IconButton, List, ListIt
 import { Delete } from "@material-ui/icons"
 import { Alert } from "@material-ui/lab"
 import { useEffect, useState } from "react"
+import { useHistory } from "react-router"
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -20,6 +21,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function BooksList() {
 
+    let history = useHistory()
+
     let classes = useStyles()
 
     let [loading, setLoading] = useState(true)
@@ -31,15 +34,31 @@ export default function BooksList() {
 
     const url = 'http://localhost:3300'
 
+    let token = localStorage.getItem("access_token")
+
     let getBooks = async () => {
-        let response = await fetch(url)
-        let data = await response.json()
-        setBooks(data)
-        setLoading(false)
+        if (!token) {
+            history.push('/login')
+        }
+        else {
+            let response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            })
+            let data = await response.json()
+            if (response.status === 200) {
+                setBooks(data)
+            }
+            else console.log(data.message)
+            setLoading(false)
+        }
     }
 
     useEffect(() => {
         getBooks()
+        // eslint-disable-next-line
     }, [])
 
     let toggleDeleteDialog = () => setDeleteDialog(p => !p)
