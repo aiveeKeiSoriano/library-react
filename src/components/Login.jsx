@@ -46,6 +46,7 @@ export default function LogIn() {
         let result = await response.json()
         if (response.status === 200) {
             localStorage.setItem("access_token", result.access_token)
+            localStorage.setItem("refresh_token", result.refresh_token)
             history.push('/books')
             setError('')
         }

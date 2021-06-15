@@ -1,8 +1,10 @@
 import { AppBar, Button, Container, CssBaseline, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, ListSubheader, makeStyles, Toolbar, Typography } from "@material-ui/core";
 import { Book, Category, Menu, MenuBook, People } from "@material-ui/icons";
 import { useState } from "react";
-import { BrowserRouter as Router, Link, Switch, Route } from 'react-router-dom'
+import { Link, Switch, Route, useHistory } from 'react-router-dom'
+import initAxios from "../networksUtils/interceptors";
 import BooksList from "./BooksList";
+import Categories from "./Categories";
 import LogIn from "./Login";
 import SignUp from "./SignUp";
 
@@ -36,8 +38,11 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function Main() {
+
+    let history = useHistory()
+    initAxios(history)
+
     return (
-        <Router>
             <Wrapper>
                 <Switch>
                     <Route exact path='/'>
@@ -47,7 +52,7 @@ export default function Main() {
                         <BooksList />
                     </Route>
                     <Route path='/categories'>
-                        <h1>List of Categories</h1>
+                        <Categories />
                     </Route>
                     <Route path='/members'>
                         <h1>List of members</h1>
@@ -63,7 +68,6 @@ export default function Main() {
                     </Route>
                 </Switch>
             </Wrapper>
-        </Router>
     )
 
 }

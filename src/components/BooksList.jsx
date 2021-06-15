@@ -1,8 +1,8 @@
 import { Button, CircularProgress, Dialog, DialogTitle, IconButton, List, ListItem, ListItemSecondaryAction, ListItemText, makeStyles, Paper, Snackbar, Typography } from "@material-ui/core"
 import { Delete } from "@material-ui/icons"
 import { Alert } from "@material-ui/lab"
+import axios from "axios"
 import { useEffect, useState } from "react"
-import { useHistory } from "react-router"
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -21,8 +21,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function BooksList() {
 
-    let history = useHistory()
-
     let classes = useStyles()
 
     let [loading, setLoading] = useState(true)
@@ -32,29 +30,17 @@ export default function BooksList() {
     let [deleting, setDeleting] = useState(false)
     let [deleted, setDeleted] = useState([false, '', 'success'])
 
-    const url = 'http://localhost:3300'
-
-    let token = localStorage.getItem("access_token")
 
     let getBooks = async () => {
-        if (!token) {
-            history.push('/login')
-        }
-        else {
-            let response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    "Authorization": "Bearer " + token
-                }
-            })
-            let data = await response.json()
+            let response = await axios.get('/books')
+            let data = response.data
             if (response.status === 200) {
                 setBooks(data)
             }
             else console.log(data.message)
+            console.log(response)
             setLoading(false)
         }
-    }
 
     useEffect(() => {
         getBooks()
@@ -65,7 +51,7 @@ export default function BooksList() {
 
     let deleteBook = async () => {
         setDeleting(true)
-        let response = await fetch(url + '/books/' + id, { method: 'DELETE' })
+        let response = await fetch("http://localhost:330/books/" + id, { method: 'DELETE' })
         setDeleting(false)
         toggleDeleteDialog()
         if (response.status === 201) {
