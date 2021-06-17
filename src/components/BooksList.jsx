@@ -38,7 +38,7 @@ export default function BooksList() {
                 setBooks(data)
             }
             else console.log(data.message)
-            console.log(response)
+            console.log(response, 'books')
             setLoading(false)
         }
 

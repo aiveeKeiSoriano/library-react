@@ -1,6 +1,8 @@
 import { Button, CircularProgress, makeStyles, Paper, TextField, Typography } from "@material-ui/core";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
+import { setError, toggleLoading } from "../redux/actions/actions";
 
 let useStyles = makeStyles((theme) => ({
     container: {
@@ -21,20 +23,21 @@ let useStyles = makeStyles((theme) => ({
 export default function LogIn() {
 
     let history = useHistory()
-
     let classes = useStyles()
+
+    let loading = useSelector(state => state.main.loading)
+    let error = useSelector(state => state.main.error)
+    let dispatch = useDispatch()
 
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
-    const [loading, setLoading] = useState(false)
 
     const [emailError, setEmailError] = useState([false, ''])
     const [passwordError, setPasswordError] = useState([false, ''])
 
-    const [error, setError] = useState('')
-
     let submitForm = async (e) => {
-        setLoading(true)
+        // dispatch(login({ email: email, password: password }))
+        dispatch(toggleLoading())
         let response = await fetch("http://localhost:3300/auth/login", {
             method: "POST",
             body: JSON.stringify( { email: email, password: password } ),
@@ -48,13 +51,13 @@ export default function LogIn() {
             localStorage.setItem("access_token", result.access_token)
             localStorage.setItem("refresh_token", result.refresh_token)
             history.push('/books')
-            setError('')
+            dispatch(setError(''))
         }
         else {
-            setError(result.message)
+            dispatch(setError(result.message))
         }
         console.log(result)
-        setLoading(false)
+        dispatch(toggleLoading())
     }
 
     return (

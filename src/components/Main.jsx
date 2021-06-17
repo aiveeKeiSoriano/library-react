@@ -1,7 +1,8 @@
 import { AppBar, Button, Container, CssBaseline, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, ListSubheader, makeStyles, Toolbar, Typography } from "@material-ui/core";
 import { Book, Category, Menu, MenuBook, People } from "@material-ui/icons";
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, Switch, Route, useHistory } from 'react-router-dom'
+import { toggleDrawer } from "../redux/actions/actions";
 import initAxios from "../networksUtils/interceptors";
 import BooksList from "./BooksList";
 import Categories from "./Categories";
@@ -76,18 +77,15 @@ function Wrapper(props) {
 
     const classes = useStyles();
 
-    let [drawerOpen, setDrawerOpen] = useState(false)
-
-    let toggleDrawer = () => {
-        setDrawerOpen(p => !p)
-    }
+    let drawerOpen = useSelector(state => state.main.drawer)
+    let dispatch = useDispatch()
 
     return (
         <div className="container">
             <CssBaseline />
             <AppBar position='static'>
                 <Toolbar>
-                    <IconButton edge='start' className={classes.menuButton} color='inherit' onClick={toggleDrawer}>
+                    <IconButton edge='start' className={classes.menuButton} color='inherit' onClick={() => dispatch(toggleDrawer())}>
                         <Menu />
                     </IconButton>
                     <Typography variant='h6' className={classes.title}>
@@ -99,7 +97,7 @@ function Wrapper(props) {
                 </Toolbar>
             </AppBar>
             <>
-                <Drawer anchor='left' open={drawerOpen} onClose={toggleDrawer}>
+                <Drawer anchor='left' open={drawerOpen} onClose={() => dispatch(toggleDrawer())}>
                     <List className={classes.fullList}>
                         <ListSubheader className={classes.menuHeader} component="div" >
                             <Typography variant='h5' align='center' color='primary'>Menu</Typography>
@@ -111,7 +109,7 @@ function Wrapper(props) {
                             { text: 'Book Issued', icon: <MenuBook />, link: "/issues" },
                         ].map(({ text, icon, link }) => (
                             <Link key={text} to={link} style={{ textDecorationLine: 'none', color: 'black' }}>
-                                <ListItem button className={classes.list} onClick={toggleDrawer}>
+                                <ListItem button className={classes.list} onClick={() => dispatch(toggleDrawer())}>
                                     <ListItemIcon>{icon}</ListItemIcon>
                                     <ListItemText primary={text} />
                                 </ListItem>

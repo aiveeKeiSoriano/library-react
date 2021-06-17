@@ -28,8 +28,9 @@ export default function initAxios(history) {
     function (res) {
       return res;
     },
-    function (error) {
-        console.log(error.response)
+    async function (error) {
+        console.log(error)
+        let originalRequest = error.config
         let { status, data } = error.response;
         console.log(status, data.message)
         if (status === 403) {
@@ -39,9 +40,10 @@ export default function initAxios(history) {
             }
             else {
                 console.log(refresh_token, 'refresh')
-               getRefresh(refresh_token)
+                await getRefresh(refresh_token)
+                return axios(originalRequest)
             }
-        }
+        } 
       return Promise.reject(error);
     }
   );
